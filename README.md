@@ -5,21 +5,26 @@ In a new project directory, create a new virtual environment
 virtualenv venv
 ```
 
-Install all of the things you'll need (psycopg2 is for PostgreSQL)
+Don't forget to activate the venv or you'll probably get errors (you'll need to any time you use a new terminal tab/window)
+```
+source venv/bin/activate
+```
+
+Install all of the things you'll need
+django-cors-headers is for CORS issues
+dj-database-url and gunicorn are for heroku
 ```
 pip install django
 pip install djangorestframework
 pip install psycopg2
+pip install django-cors-headers
+pip install dj-database-url
+pip install gunicorn
 ```
 
 Put you're dependencies in a requirements.txt (basically a package.json)
 ```
-pip freeze > requirements.tx
-```
-
-Don't forget to activate the venv or you'll probably get errors
-```
-source venv/bin/activate
+pip freeze > requirements.txt
 ```
 
 Make project with 
@@ -27,9 +32,35 @@ Make project with
 django-admin startproject bookAPI
 ```
 
-make a new app in that directory with 
+Make a new app in that directory with 
 ```
 python manage.py startapp books
+```
+
+### Heroku stuff
+
+Make a Procfile in the root directory
+```
+touch Procfile
+```
+
+In the Procfile, put the following inside (where bookAPI is the name of your project):
+```
+web: gunicorn bookAPI.wsgi --log-file -
+```
+
+In the MIDDLEWARE part of settings.py, add:
+```
+    'corsheaders.middleware.CorsMiddleware',
+```
+
+At the bottom of settings.py, put the following:
+```
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
+
+CORS_ORIGIN_ALLOW_ALL = True
 ```
 
 ### Create a database (using PostgreSQL)
@@ -205,4 +236,35 @@ urlpatterns = [
     url(r'^', include('books.urls')),
 ]
 
+```
+
+## Deploy to Heroku
+
+Add and commit all changes
+Login and create an app
+```
+heroku login
+heroku create
+```
+
+Use the url it gives you and add it into ALLOWED\_HOSTS in settings.py
+
+Run this because it breaks if you don't
+```
+heroku config:set DISABLE_COLLECTSTATIC=0
+```
+
+Commit it all and upload
+```
+git push heroku
+```
+
+Run migrations
+```
+heroku run python manage.py migrate
+```
+
+Open!
+```
+heroku open
 ```
