@@ -13,7 +13,7 @@ SECRET_KEY = 'q=mm*gb97-@i%)0d1k92o1#6xg8z8i)!@6krbt$cv4rj3phy85'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['rocky-mesa-64665.herokuapp.com/']
 
 
 # Application definition
