@@ -1,11 +1,25 @@
 ## Set up the project
 
-Assuming you've installed python and django in a venv....
-Mine is in a virtualenv called djangodev
+In a new project directory, create a new virtual environment
+```
+virtualenv venv
+```
+
+Install all of the things you'll need (psycopg2 is for PostgreSQL)
+```
+pip install django
+pip install djangorestframework
+pip install psycopg2
+```
+
+Put you're dependencies in a requirements.txt (basically a package.json)
+```
+pip freeze > requirements.tx
+```
 
 Don't forget to activate the venv or you'll probably get errors
 ```
-source ~/.virtualenvs/djangodev/bin/activate
+source venv/bin/activate
 ```
 
 Make project with 
@@ -16,11 +30,6 @@ django-admin startproject bookAPI
 make a new app in that directory with 
 ```
 python manage.py startapp books
-```
-
-make sure to install django-rest-framework if you haven't already
-```
-pip install djangorestframework
 ```
 
 ### Create a database (using PostgreSQL)
